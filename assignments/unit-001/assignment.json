@@ -1,0 +1,22 @@
+{
+  "schemaVersion": 1,
+  "programId": "bryte-mentorship",
+  "programName": "Bryte Church Mentorship Program",
+  "unitId": "unit-001",
+  "unitNumber": 1,
+  "title": "Genesis Foundations",
+  "version": 2,
+  "releasedAt": "2026-08-14",
+  "assignments": [
+    {"id":"unit-001-gen-001","sequence":1,"book":"Genesis","startChapter":1,"type":"chapter-review","estimatedMinutes":45},
+    {"id":"unit-001-gen-002","sequence":2,"book":"Genesis","startChapter":2,"type":"chapter-review","estimatedMinutes":45},
+    {"id":"unit-001-gen-003","sequence":3,"book":"Genesis","startChapter":3,"type":"chapter-review","estimatedMinutes":45},
+    {"id":"unit-001-gen-004","sequence":4,"book":"Genesis","startChapter":4,"type":"chapter-review","estimatedMinutes":45},
+    {"id":"unit-001-gen-006-008","sequence":5,"book":"Genesis","startChapter":6,"endChapter":8,"type":"chapter-review","combinedReview":true,"estimatedMinutes":75,"instructions":"Prepare one combined Chapter Review for Genesis 6–8."},
+    {"id":"unit-001-gen-009","sequence":6,"book":"Genesis","startChapter":9,"type":"chapter-review","estimatedMinutes":45},
+    {"id":"unit-001-gen-011","sequence":7,"book":"Genesis","startChapter":11,"type":"chapter-review","estimatedMinutes":45},
+    {"id":"unit-001-gen-012","sequence":8,"book":"Genesis","startChapter":12,"type":"chapter-review","estimatedMinutes":45},
+    {"id":"unit-001-gen-015","sequence":9,"book":"Genesis","startChapter":15,"type":"chapter-review","estimatedMinutes":45},
+    {"id":"unit-001-gen-022","sequence":10,"book":"Genesis","startChapter":22,"type":"chapter-review","estimatedMinutes":45}
+  ]
+}

@@ -1,0 +1,9 @@
+{
+  "id": "bryte-mentorship",
+  "name": "Bryte Mentorship",
+  "version": "0.1.0",
+  "minAppVersion": "1.6.0",
+  "description": "Bryte Mentorship curriculum and study plugin for Obsidian.",
+  "author": "Bryte Church",
+  "isDesktopOnly": false
+}

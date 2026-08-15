@@ -1,0 +1,24 @@
+{
+  "schemaVersion": 1,
+  "programId": "bryte-mentorship",
+  "programName": "Bryte Church Mentorship Program",
+  "latestUnit": 2,
+  "units": [
+    {
+      "unitId": "unit-001",
+      "unitNumber": 1,
+      "version": 2,
+      "releasedAt": "2026-08-14",
+      "path": "unit-001/assignment.json",
+      "released": true
+    },
+    {
+      "unitId": "unit-002",
+      "unitNumber": 2,
+      "version": 2,
+      "releasedAt": "2026-08-15",
+      "path": "unit-002/assignment.json",
+      "released": true
+    }
+  ]
+}

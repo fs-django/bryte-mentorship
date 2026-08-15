@@ -1,0 +1,30 @@
+{
+  "schemaVersion": 1,
+  "programId": "bryte-mentorship",
+  "programName": "Bryte Church Mentorship Program",
+  "unitId": "unit-002",
+  "unitNumber": 2,
+  "title": "Patriarchs and Exodus",
+  "version": 2,
+  "releasedAt": "2026-08-15",
+  "assignments": [
+    {"id":"unit-002-gen-022","sequence":1,"book":"Genesis","startChapter":22,"type":"chapter-review","estimatedMinutes":45,"instructions":"Revisit Genesis 22 for Unit 2. Preserve Unit 1 work and add new observations in this Unit's review."},
+    {"id":"unit-002-gen-032","sequence":2,"book":"Genesis","startChapter":32,"type":"chapter-review","estimatedMinutes":45},
+    {"id":"unit-002-gen-037","sequence":3,"book":"Genesis","startChapter":37,"type":"chapter-review","estimatedMinutes":45},
+    {"id":"unit-002-gen-039","sequence":4,"book":"Genesis","startChapter":39,"type":"chapter-review","estimatedMinutes":45},
+    {"id":"unit-002-gen-040","sequence":5,"book":"Genesis","startChapter":40,"type":"chapter-review","estimatedMinutes":45},
+    {"id":"unit-002-gen-049","sequence":6,"book":"Genesis","startChapter":49,"type":"chapter-review","estimatedMinutes":45},
+    {"id":"unit-002-exo-002","sequence":7,"book":"Exodus","startChapter":2,"type":"chapter-review","estimatedMinutes":45},
+    {"id":"unit-002-exo-003","sequence":8,"book":"Exodus","startChapter":3,"type":"chapter-review","estimatedMinutes":45},
+    {"id":"unit-002-exo-004","sequence":9,"book":"Exodus","startChapter":4,"type":"chapter-review","estimatedMinutes":45},
+    {"id":"unit-002-exo-011","sequence":10,"book":"Exodus","startChapter":11,"type":"chapter-review","estimatedMinutes":45},
+    {"id":"unit-002-exo-012","sequence":11,"book":"Exodus","startChapter":12,"type":"chapter-review","estimatedMinutes":45},
+    {"id":"unit-002-exo-014","sequence":12,"book":"Exodus","startChapter":14,"type":"chapter-review","estimatedMinutes":45},
+    {"id":"unit-002-exo-015","sequence":13,"book":"Exodus","startChapter":15,"type":"chapter-review","estimatedMinutes":45},
+    {"id":"unit-002-exo-018","sequence":14,"book":"Exodus","startChapter":18,"type":"chapter-review","estimatedMinutes":45},
+    {"id":"unit-002-exo-019","sequence":15,"book":"Exodus","startChapter":19,"type":"chapter-review","estimatedMinutes":45},
+    {"id":"unit-002-exo-020","sequence":16,"book":"Exodus","startChapter":20,"type":"chapter-review","estimatedMinutes":45},
+    {"id":"unit-002-exo-024","sequence":17,"book":"Exodus","startChapter":24,"type":"chapter-review","estimatedMinutes":45},
+    {"id":"unit-002-exo-032","sequence":18,"book":"Exodus","startChapter":32,"type":"chapter-review","estimatedMinutes":45}
+  ]
+}
