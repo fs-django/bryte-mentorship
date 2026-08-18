@@ -1,0 +1,9 @@
+{
+  "id": "bryte-mentorship",
+  "name": "Bryte Mentorship",
+  "version": "0.1.4",
+  "minAppVersion": "1.6.0",
+  "description": "Plan mentorship studies, pull released Units, memorize passage summaries, and keep meeting notes.",
+  "author": "Bryte Church",
+  "isDesktopOnly": false
+}
