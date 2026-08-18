@@ -5,6 +5,6 @@
   "version": "0.1.0",
   "minAppVersion": "1.6.0",
   "releasedAt": "2026-08-14",
-  "updateAssetsAvailable": false,
+  "updateAssetsAvailable": true,
   "files": []
 }
