@@ -2,9 +2,30 @@
   "schemaVersion": 1,
   "pluginId": "bryte-mentorship",
   "channel": "stable",
-  "version": "0.1.0",
+  "version": "0.1.4",
   "minAppVersion": "1.6.0",
-  "releasedAt": "2026-08-14",
+  "releasedAt": "2026-08-15",
   "updateAssetsAvailable": true,
-  "files": []
+  "files": [
+    {
+      "name": "main.js",
+      "path": "downloads/plugin/0.1.4/main.js",
+      "sha256": "27b70a03d0a9cc8d276002fae088c89e2149835fce9788ecad208167fc7ee8aa"
+    },
+    {
+      "name": "manifest.json",
+      "path": "downloads/plugin/0.1.4/manifest.json",
+      "sha256": "8114854ac9064e8360bd52dbecd5b5068d95800735e4da1121f47964ecfce449"
+    },
+    {
+      "name": "styles.css",
+      "path": "downloads/plugin/0.1.4/styles.css",
+      "sha256": "7aa645154b92fb5d0166054e91b295045c5fe490b53c049ea4a73bc381501030"
+    },
+    {
+      "name": "versions.json",
+      "path": "downloads/plugin/0.1.4/versions.json",
+      "sha256": "b49b09d1b8de89d6977dea57bf33587eefbc027d3f5a09821ee059c3a86e1522"
+    }
+  ]
 }
