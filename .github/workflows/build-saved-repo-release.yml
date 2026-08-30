@@ -1,0 +1,41 @@
+name: Build saved-repo restore release
+
+on:
+  push:
+    branches:
+      - agent/pull-saved-repo
+    paths:
+      - src/private-repo-pull.js
+      - scripts/build_release_0_1_5.py
+      - tests/private-repo-pull.test.js
+      - .github/workflows/build-saved-repo-release.yml
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Build 0.1.5 release
+        run: python scripts/build_release_0_1_5.py
+      - name: Check JavaScript syntax
+        run: node --check downloads/plugin/0.1.5/main.js
+      - name: Test private repository restore
+        run: node tests/private-repo-pull.test.js downloads/plugin/0.1.5/main.js
+      - name: Commit generated release assets
+        shell: bash
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add manifest.json versions.json downloads/plugin/0.1.5 downloads/plugin-release.json downloads/bryte-mentorship-0.1.5.zip downloads/bryte-mentorship-latest.zip downloads/SHA256SUMS.txt
+          if git diff --cached --quiet; then
+            echo "No generated changes."
+            exit 0
+          fi
+          git commit -m "release: build Bryte Mentorship 0.1.5"
+          git push origin HEAD:${GITHUB_REF_NAME}
