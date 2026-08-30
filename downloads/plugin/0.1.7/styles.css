@@ -1,0 +1,12 @@
+.bryte-dashboard { display: grid; gap: 1rem; }
+.bryte-section { border: 1px solid var(--background-modifier-border); border-radius: 10px; padding: 1rem; }
+.bryte-section h3 { margin-top: 0; }
+.bryte-item { display: flex; align-items: center; justify-content: space-between; gap: .75rem; padding: .5rem 0; border-top: 1px solid var(--background-modifier-border); }
+.bryte-item:first-of-type { border-top: 0; }
+.bryte-muted { color: var(--text-muted); font-size: var(--font-ui-small); }
+.bryte-actions { display: flex; gap: .5rem; flex-wrap: wrap; }
+.bryte-card { min-height: 220px; border: 1px solid var(--background-modifier-border); border-radius: 12px; padding: 1.5rem; display: flex; flex-direction: column; justify-content: center; text-align: center; cursor: pointer; }
+.bryte-card .passage { font-size: 1.6em; font-weight: 700; margin-bottom: .75rem; }
+.bryte-card .answer { white-space: pre-wrap; text-align: left; }
+.bryte-rating { display: flex; justify-content: center; gap: .5rem; flex-wrap: wrap; margin-top: 1rem; }
+.bryte-status { font-weight: 600; }
