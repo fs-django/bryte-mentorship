@@ -7,16 +7,21 @@ class Dummy{constructor(){} close(){} open(){}}
 class Setting{setName(){return this}setDesc(){return this}addText(){return this}addToggle(){return this}addButton(){return this}}
 const remoteStudy=`---\nbryte_type: study\nunit: 1\nassignment_id: unit-001-gen-001\nstatus: complete\n---\n\n# Genesis 1 — Chapter Review\n\nFinished work.\n`;
 const remoteMeeting='# Unit 1 Mentorship Meeting\n\nRemote meeting notes.\n';
-function decodePath(url){const marker='/contents/';const start=url.indexOf(marker);const raw=url.slice(start+marker.length).split('?')[0];return raw.split('/').map(decodeURIComponent).join('/')}
+function decodePath(url){const marker='/contents';const start=url.indexOf(marker);const raw=url.slice(start+marker.length).split('?')[0].replace(/^\//,'');return raw.split('/').filter(Boolean).map(decodeURIComponent).join('/')}
 async function requestUrl({url}){
  const p=decodePath(url);
+ if(p==='')return{json:[{type:'dir',path:'Bryte Mentorship'}]};
+ if(p==='Bryte Mentorship')return{json:[
+  {type:'dir',path:'Bryte Mentorship/Studies'},
+  {type:'dir',path:'Bryte Mentorship/Meetings'},
+  {type:'dir',path:'Bryte Mentorship/Study Plans'}
+ ]};
  if(p==='Bryte Mentorship/Studies')return{json:[{type:'dir',path:'Bryte Mentorship/Studies/Unit 1'}]};
  if(p==='Bryte Mentorship/Studies/Unit 1')return{json:[{type:'file',path:'Bryte Mentorship/Studies/Unit 1/01-genesis-1.md'}]};
  if(p==='Bryte Mentorship/Studies/Unit 1/01-genesis-1.md')return{json:{content:Buffer.from(remoteStudy,'utf8').toString('base64')}};
  if(p==='Bryte Mentorship/Meetings')return{json:[{type:'file',path:'Bryte Mentorship/Meetings/Unit 1 Meeting.md'}]};
  if(p==='Bryte Mentorship/Meetings/Unit 1 Meeting.md')return{json:{content:Buffer.from(remoteMeeting,'utf8').toString('base64')}};
  if(p==='Bryte Mentorship/Study Plans')return{json:[]};
- if(['notes','Notes','Bryte Mentorship/notes','Bryte Mentorship/Notes'].includes(p))return{json:[]};
  throw new Error(`Unexpected URL: ${url}`);
 }
 const obsidian={Plugin:Dummy,Modal:Dummy,PluginSettingTab:Dummy,Setting,Notice:class{},TFile,requestUrl,normalizePath:value=>String(value).replace(/\\/g,'/').replace(/\/+/g,'/'),requireApiVersion:()=>true};
@@ -49,5 +54,6 @@ class Vault{
  const recovered=plugin.app.vault.getAbstractFileByPath('Bryte Mentorship/Recovered from GitHub/Meetings/Unit 1 Meeting.md');
  assert(recovered instanceof TFile,'remote conflict copy should be written');
  assert.strictEqual(recovered.content,remoteMeeting);
- console.log('private repo restore tests passed');
+ assert.strictEqual(plugin.data.savedRepoPull.matched,2);
+ console.log('private repo restore discovery tests passed');
 })().catch(error=>{console.error(error);process.exit(1)});

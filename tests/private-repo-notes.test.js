@@ -18,11 +18,18 @@ function decodeGitHubText(value){return Buffer.from(value.replace(/\n/g,''),'bas
 function decodePath(url){const marker='/contents';const start=url.indexOf(marker);const raw=url.slice(start+marker.length).split('?')[0].replace(/^\//,'');return raw.split('/').filter(Boolean).map(decodeURIComponent).join('/')}
 async function requestUrl({url}){
  const p=decodePath(url);
- // Mirror fs-django/bryte-mentorship-mh: repo-root assignments/ + notes/, no Bryte Mentorship/* tree.
+ // Mirror fs-django/bryte-mentorship-mh exactly: README.md, assignments/, notes/ at repo root.
+ if(p==='')return{json:[
+  {type:'file',path:'README.md'},
+  {type:'dir',path:'assignments'},
+  {type:'dir',path:'notes'}
+ ]};
+ if(p==='README.md')return{json:{content:Buffer.from('# private mentorship repo\n','utf8').toString('base64')}};
+ if(p==='assignments')return{json:[{type:'file',path:'assignments/manifest.json'}]};
+ if(p==='assignments/manifest.json')return{json:{content:Buffer.from('{"schemaVersion":1}\n','utf8').toString('base64')}};
  if(p==='notes')return{json:[{type:'dir',path:'notes/books'}]};
  if(p==='notes/books')return{json:[{type:'file',path:'notes/books/Revitalize - Chapters 1-3.md'}]};
  if(p==='notes/books/Revitalize - Chapters 1-3.md')return{json:{content:Buffer.from(remoteBook,'utf8').toString('base64')}};
- if(['Notes','Bryte Mentorship/Studies','Bryte Mentorship/Meetings','Bryte Mentorship/Study Plans','Bryte Mentorship/notes','Bryte Mentorship/Notes'].includes(p))throw{status:404,message:'Not Found'};
  throw new Error(`Unexpected URL: ${url}`);
 }
 async function parent(vault,filePath){
@@ -47,9 +54,17 @@ vm.runInThisContext(fs.readFileSync(sourcePath,'utf8'),{filename:sourcePath});
  plugin.data={settings:{github:{owner:'fs-django',repo:'bryte-mentorship-mh',branch:'main',token:'token',pathPrefix:'Bryte Mentorship'}},assignmentStates:{}};
  plugin.app={vault:new Vault()};plugin.save=async()=>{};
  const result=await plugin.pullStudentWork({silent:true});
- assert.deepStrictEqual({restored:result.restored,unchanged:result.unchanged,conflicts:result.conflicts},{restored:1,unchanged:0,conflicts:0});
+ assert.deepStrictEqual(
+  {restored:result.restored,unchanged:result.unchanged,conflicts:result.conflicts,scanned:result.scanned,matched:result.matched},
+  {restored:1,unchanged:0,conflicts:0,scanned:3,matched:1}
+ );
  const note=plugin.app.vault.getAbstractFileByPath('Bryte Mentorship/Notes/books/Revitalize - Chapters 1-3.md');
- assert(note instanceof TFile,'root-level repo notes should restore despite object-shaped 404s from missing prefixed paths');
+ assert(note instanceof TFile,'repo-root notes/books file should restore after repository discovery');
  assert.strictEqual(note.content,remoteBook);
- console.log('private repo root-note restore tests passed');
+ assert.strictEqual(plugin.data.savedRepoPull.repo,'fs-django/bryte-mentorship-mh@main');
+ assert.strictEqual(plugin.data.savedRepoPull.scanned,3);
+ assert.strictEqual(plugin.data.savedRepoPull.matched,1);
+ assert.strictEqual(plugin.data.savedRepoPull.restored,1);
+ assert.strictEqual(plugin.data.savedRepoPull.error,null);
+ console.log('private repo discovery + note restore tests passed');
 })().catch(error=>{console.error(error);process.exit(1)});
