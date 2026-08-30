@@ -1,0 +1,67 @@
+name: Build Bryte Mentorship 0.1.6
+
+on:
+  pull_request:
+    branches:
+      - main
+    paths:
+      - 'src/private-repo-pull.js'
+      - 'scripts/build_release_0_1_6.py'
+      - 'tests/**'
+      - 'README.md'
+      - '.github/workflows/release-0.1.6.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build-release:
+    runs-on: ubuntu-latest
+    env:
+      TARGET_BRANCH: ${{ github.head_ref || github.ref_name }}
+    steps:
+      - name: Check out release branch
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.head_ref || github.ref_name }}
+          fetch-depth: 0
+
+      - name: Build 0.1.6 release assets
+        run: python scripts/build_release_0_1_6.py
+
+      - name: Validate plugin JavaScript
+        run: node --check downloads/plugin/0.1.6/main.js
+
+      - name: Test saved coursework restore
+        run: node tests/private-repo-pull.test.js downloads/plugin/0.1.6/main.js
+
+      - name: Test repository notes restore
+        run: node tests/private-repo-notes.test.js downloads/plugin/0.1.6/main.js
+
+      - name: Verify release metadata
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+
+          manifest = json.loads(Path('manifest.json').read_text())
+          release = json.loads(Path('downloads/plugin-release.json').read_text())
+          assert manifest['version'] == '0.1.6', manifest
+          assert release['version'] == '0.1.6', release
+          assert Path('downloads/bryte-mentorship-0.1.6.zip').is_file()
+          assert Path('downloads/bryte-mentorship-latest.zip').is_file()
+          print('release metadata verified')
+          PY
+
+      - name: Commit generated stable release
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add manifest.json versions.json downloads/plugin/0.1.6 downloads/plugin-release.json downloads/bryte-mentorship-0.1.6.zip downloads/bryte-mentorship-latest.zip downloads/SHA256SUMS.txt
+          if git diff --cached --quiet; then
+            echo 'Release assets already current.'
+            exit 0
+          fi
+          git commit -m 'release: publish Bryte Mentorship 0.1.6 assets'
+          git push origin "HEAD:${TARGET_BRANCH}"
