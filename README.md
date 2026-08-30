@@ -25,17 +25,19 @@ Users already running a version older than 0.1.4 need to install 0.1.4 (or a lat
 
 ## Student saved repository
 
-Bryte Mentorship **0.1.5** can restore student-owned work from the private GitHub repository already configured in plugin settings.
+Bryte Mentorship can restore student-owned work from the private GitHub repository already configured in plugin settings.
 
 Configure **Repository owner**, **Repository name**, **Branch**, **Path prefix**, and a fine-grained token limited to that student repository with **Contents read/write** access. The plugin continues to use the public repository for released curriculum and the student's configured repository for their own saved work.
 
-By default, **Pull assignments** now restores saved student work first, then installs or updates the released curriculum. You can disable this behavior with **Pull saved work with assignments**, or run **Bryte Mentorship: Pull student work from private GitHub repository** / **Pull saved work** at any time.
+By default, **Pull assignments** restores saved student work first, then installs or updates the released curriculum. You can disable this behavior with **Pull saved work with assignments**, or run **Bryte Mentorship: Pull student work from private GitHub repository** / **Pull saved work** at any time.
 
-Saved-repository restore is intentionally limited to:
+Saved-repository restore recognizes the existing coursework paths under the configured prefix:
 
 - `Bryte Mentorship/Studies/`
 - `Bryte Mentorship/Meetings/`
 - `Bryte Mentorship/Study Plans/`
+
+It also restores Markdown notes from a repository-root `notes/` (or `Notes/`) directory. The subfolder structure is preserved in the vault under `Bryte Mentorship/Notes/`. For example, `notes/books/Revitalize - Chapters 1-3.md` becomes `Bryte Mentorship/Notes/books/Revitalize - Chapters 1-3.md`.
 
 Missing files are restored to the normal vault paths. Matching files are left unchanged. If a local file differs from the GitHub copy, the local file is preserved and the remote copy is written under `Bryte Mentorship/Recovered from GitHub/` for review instead of silently overwriting student work. Restored study frontmatter also restores the assignment status used by the dashboard.
 

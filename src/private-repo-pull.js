@@ -1,6 +1,6 @@
-// Bryte Mentorship 0.1.5: restore student-owned work from the configured GitHub repository.
-// This file is concatenated after the 0.1.4 runtime when the 0.1.5 release is built.
+// Bryte Mentorship 0.1.6: restore student-owned work and repo notes from configured GitHub repository.
 const SAVED_WORK_DIRS=['Studies','Meetings','Study Plans'];
+const SAVED_NOTE_DIRS=['notes','Notes'];
 const savedRepoReady=g=>Boolean(g&&g.owner&&g.repo&&g.token);
 const savedRepoHeaders=g=>({Authorization:`Bearer ${g.token}`,Accept:'application/vnd.github+json','X-GitHub-Api-Version':'2022-11-28'});
 const savedRepoRoot=g=>normalizePath(String(g.pathPrefix||ROOT).replace(/^\/+|\/+$/g,''));
@@ -29,6 +29,19 @@ function savedRelativePath(root,remotePath){
  if(!rel.toLowerCase().endsWith('.md'))return null;
  return rel;
 }
+function savedNoteRelativePath(root,remotePath){
+ const normalizedRoot=normalizePath(root).replace(/^\/+|\/+$/g,'');
+ const normalized=normalizePath(remotePath).replace(/^\/+/,''),lower=normalized.toLowerCase();
+ const prefixes=['notes/'];
+ if(normalizedRoot)prefixes.push(`${normalizedRoot}/notes/`);
+ for(const prefix of prefixes){
+  if(!lower.startsWith(prefix.toLowerCase()))continue;
+  const tail=normalized.slice(prefix.length);
+  if(!tail||tail.startsWith('/')||tail.split('/').some(part=>part==='..')||!tail.toLowerCase().endsWith('.md'))return null;
+  return normalizePath(`Notes/${tail}`);
+ }
+ return null;
+}
 function frontmatterField(text,key){const match=String(text||'').match(new RegExp(`^${key}:\\s*["']?([^\\n"']+)["']?\\s*$`,'m'));return match?match[1].trim():''}
 function restoreAssignmentState(plugin,text){
  const id=frontmatterField(text,'assignment_id'),status=frontmatterField(text,'status');
@@ -53,10 +66,14 @@ BrytePlugin.prototype.pullStudentWork=async function(options={}){
   const root=savedRepoRoot(g);
   let remotePaths=[];
   for(const dir of SAVED_WORK_DIRS)remotePaths.push(...await listSavedRepoFiles(g,normalizePath(`${root}/${dir}`)));
+  for(const dir of SAVED_NOTE_DIRS){
+   remotePaths.push(...await listSavedRepoFiles(g,dir));
+   remotePaths.push(...await listSavedRepoFiles(g,normalizePath(`${root}/${dir}`)));
+  }
   remotePaths=[...new Set(remotePaths)].sort();
   let restored=0,unchanged=0,conflicts=0;
   for(const remotePath of remotePaths){
-   const relative=savedRelativePath(root,remotePath);
+   const relative=savedRelativePath(root,remotePath)||savedNoteRelativePath(root,remotePath);
    if(!relative)continue;
    const content=await readSavedRepoFile(g,remotePath),localPath=normalizePath(`${ROOT}/${relative}`),local=this.app.vault.getAbstractFileByPath(localPath);
    if(!(local instanceof TFile)){
@@ -94,7 +111,7 @@ BryteSettings.prototype.display=function(){
  savedRepoBaseSettingsDisplay.call(this);
  const e=this.containerEl;
  e.createEl('h3',{text:'Saved-repo restore'});
- new Setting(e).setName('Pull saved work with assignments').setDesc('Before released assignments are installed, restore Studies, Meetings, and Study Plans from the configured student GitHub repository.').addToggle(t=>t.setValue(this.p.data.settings.pullStudentWorkWithAssignments!==false).onChange(async value=>{this.p.data.settings.pullStudentWorkWithAssignments=value;await this.p.save()}));
+ new Setting(e).setName('Pull saved work with assignments').setDesc('Before released assignments are installed, restore Studies, Meetings, Study Plans, and Markdown notes from the configured student GitHub repository.').addToggle(t=>t.setValue(this.p.data.settings.pullStudentWorkWithAssignments!==false).onChange(async value=>{this.p.data.settings.pullStudentWorkWithAssignments=value;await this.p.save()}));
  new Setting(e).setName('Pull saved work now').setDesc('Existing local files are never silently overwritten. A differing GitHub copy is placed under “Bryte Mentorship/Recovered from GitHub” for review.').addButton(b=>b.setButtonText('Pull now').setCta().onClick(async()=>{await this.p.pullStudentWork({silent:false})}));
 };
 const savedRepoBaseDashboardRender=Dashboard.prototype.render;
