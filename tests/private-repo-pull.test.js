@@ -16,6 +16,7 @@ async function requestUrl({url}){
  if(p==='Bryte Mentorship/Meetings')return{json:[{type:'file',path:'Bryte Mentorship/Meetings/Unit 1 Meeting.md'}]};
  if(p==='Bryte Mentorship/Meetings/Unit 1 Meeting.md')return{json:{content:Buffer.from(remoteMeeting,'utf8').toString('base64')}};
  if(p==='Bryte Mentorship/Study Plans')return{json:[]};
+ if(['notes','Notes','Bryte Mentorship/notes','Bryte Mentorship/Notes'].includes(p))return{json:[]};
  throw new Error(`Unexpected URL: ${url}`);
 }
 const obsidian={Plugin:Dummy,Modal:Dummy,PluginSettingTab:Dummy,Setting,Notice:class{},TFile,requestUrl,normalizePath:value=>String(value).replace(/\\/g,'/').replace(/\/+/g,'/'),requireApiVersion:()=>true};
