@@ -1,4 +1,4 @@
-name: Build Bryte Mentorship 0.1.7
+name: Build Bryte Mentorship 0.1.8
 
 on:
   pull_request:
@@ -6,7 +6,7 @@ on:
       - main
     paths:
       - 'src/private-repo-pull.js'
-      - 'scripts/build_release_0_1_7.py'
+      - 'scripts/build_release_0_1_8.py'
       - 'tests/**'
       - 'README.md'
       - '.github/workflows/release-0.1.6.yml'
@@ -27,17 +27,17 @@ jobs:
           ref: ${{ github.head_ref || github.ref_name }}
           fetch-depth: 0
 
-      - name: Build 0.1.7 release assets
-        run: python scripts/build_release_0_1_7.py
+      - name: Build 0.1.8 release assets
+        run: python scripts/build_release_0_1_8.py
 
       - name: Validate plugin JavaScript
-        run: node --check downloads/plugin/0.1.7/main.js
+        run: node --check downloads/plugin/0.1.8/main.js
 
       - name: Test saved coursework restore
-        run: node tests/private-repo-pull.test.js downloads/plugin/0.1.7/main.js
+        run: node tests/private-repo-pull.test.js downloads/plugin/0.1.8/main.js
 
       - name: Test repository notes restore
-        run: node tests/private-repo-notes.test.js downloads/plugin/0.1.7/main.js
+        run: node tests/private-repo-notes.test.js downloads/plugin/0.1.8/main.js
 
       - name: Verify release metadata
         run: |
@@ -47,9 +47,9 @@ jobs:
 
           manifest = json.loads(Path('manifest.json').read_text())
           release = json.loads(Path('downloads/plugin-release.json').read_text())
-          assert manifest['version'] == '0.1.7', manifest
-          assert release['version'] == '0.1.7', release
-          assert Path('downloads/bryte-mentorship-0.1.7.zip').is_file()
+          assert manifest['version'] == '0.1.8', manifest
+          assert release['version'] == '0.1.8', release
+          assert Path('downloads/bryte-mentorship-0.1.8.zip').is_file()
           assert Path('downloads/bryte-mentorship-latest.zip').is_file()
           print('release metadata verified')
           PY
@@ -58,10 +58,10 @@ jobs:
         run: |
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git add manifest.json versions.json downloads/plugin/0.1.7 downloads/plugin-release.json downloads/bryte-mentorship-0.1.7.zip downloads/bryte-mentorship-latest.zip downloads/SHA256SUMS.txt
+          git add manifest.json versions.json downloads/plugin/0.1.8 downloads/plugin-release.json downloads/bryte-mentorship-0.1.8.zip downloads/bryte-mentorship-latest.zip downloads/SHA256SUMS.txt
           if git diff --cached --quiet; then
             echo 'Release assets already current.'
             exit 0
           fi
-          git commit -m 'release: publish Bryte Mentorship 0.1.7 assets'
+          git commit -m 'release: publish Bryte Mentorship 0.1.8 assets'
           git push origin "HEAD:${TARGET_BRANCH}"
