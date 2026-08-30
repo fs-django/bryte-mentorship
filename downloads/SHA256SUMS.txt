@@ -1,2 +1,2 @@
-c272b2b935d387e851f4608e688e70cabcbd9f0e4455b387dfce3dc3d9b8286c  bryte-mentorship-0.1.7.zip
-c272b2b935d387e851f4608e688e70cabcbd9f0e4455b387dfce3dc3d9b8286c  bryte-mentorship-latest.zip
+2305c6faadb2d4cc128bffda0c1d8760e341f6db0fe6765410be686e0ab5ae1e  bryte-mentorship-0.1.8.zip
+2305c6faadb2d4cc128bffda0c1d8760e341f6db0fe6765410be686e0ab5ae1e  bryte-mentorship-latest.zip
