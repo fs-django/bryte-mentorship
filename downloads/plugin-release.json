@@ -2,30 +2,30 @@
   "schemaVersion": 1,
   "pluginId": "bryte-mentorship",
   "channel": "stable",
-  "version": "0.1.6",
+  "version": "0.1.7",
   "minAppVersion": "1.6.0",
   "releasedAt": "2026-08-30",
   "updateAssetsAvailable": true,
   "files": [
     {
       "name": "main.js",
-      "path": "downloads/plugin/0.1.6/main.js",
-      "sha256": "05e8c0ffeca651c851456d2679af1e2566cdde587f9b72c1f97ff115ca474fbc"
+      "path": "downloads/plugin/0.1.7/main.js",
+      "sha256": "4d58b403d5c5ad7f5c3869d7cfa0251d55e6129a80b289c4e5ed901fed5750d9"
     },
     {
       "name": "manifest.json",
-      "path": "downloads/plugin/0.1.6/manifest.json",
-      "sha256": "11b448a558c9c7cb57001d33c220d039e228a5f393ca98371e12bf67e0536ac9"
+      "path": "downloads/plugin/0.1.7/manifest.json",
+      "sha256": "a91f8d39d16461cb4c8ab095a32972f21b0635e9a842d8d5bbbb3b8f13a73e36"
     },
     {
       "name": "styles.css",
-      "path": "downloads/plugin/0.1.6/styles.css",
+      "path": "downloads/plugin/0.1.7/styles.css",
       "sha256": "7aa645154b92fb5d0166054e91b295045c5fe490b53c049ea4a73bc381501030"
     },
     {
       "name": "versions.json",
-      "path": "downloads/plugin/0.1.6/versions.json",
-      "sha256": "4c04f410a2f0b27de3d297fce052c82366163a987547a67dd2883de261dff601"
+      "path": "downloads/plugin/0.1.7/versions.json",
+      "sha256": "cab2e1f7954dc28a13b4250fc80a193b3e037ea6f3e656b982e03e44cba24082"
     }
   ]
 }
