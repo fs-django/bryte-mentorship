@@ -1,10 +1,11 @@
-// Bryte Mentorship 0.1.6: restore student-owned work and repo notes from configured GitHub repository.
+// Bryte Mentorship 0.1.7: restore student-owned work and repo notes from configured GitHub repository.
 const SAVED_WORK_DIRS=['Studies','Meetings','Study Plans'];
 const SAVED_NOTE_DIRS=['notes','Notes'];
 const savedRepoReady=g=>Boolean(g&&g.owner&&g.repo&&g.token);
 const savedRepoHeaders=g=>({Authorization:`Bearer ${g.token}`,Accept:'application/vnd.github+json','X-GitHub-Api-Version':'2022-11-28'});
 const savedRepoRoot=g=>normalizePath(String(g.pathPrefix||ROOT).replace(/^\/+|\/+$/g,''));
-function savedRepoUrl(g,path){const enc=normalizePath(path).split('/').filter(Boolean).map(encodeURIComponent).join('/');return `https://api.github.com/repos/${encodeURIComponent(g.owner)}/${encodeURIComponent(g.repo)}/contents/${enc}?ref=${encodeURIComponent(g.branch||'main')}`}
+const savedRepoNotFound=error=>Boolean(error&&(error.status===404||error.statusCode===404||error?.response?.status===404||error?.response?.statusCode===404||String(error).includes('404')));
+function savedRepoUrl(g,path){const enc=normalizePath(path).split('/').filter(Boolean).map(encodeURIComponent).join('/');const suffix=enc?`/${enc}`:'';return `https://api.github.com/repos/${encodeURIComponent(g.owner)}/${encodeURIComponent(g.repo)}/contents${suffix}?ref=${encodeURIComponent(g.branch||'main')}`}
 async function listSavedRepoFiles(g,path){
  try{
   const json=(await requestUrl({url:savedRepoUrl(g,path),headers:savedRepoHeaders(g)})).json;
@@ -16,7 +17,7 @@ async function listSavedRepoFiles(g,path){
    else if(entry.type==='file')out.push(entry.path);
   }
   return out;
- }catch(error){if(String(error).includes('404'))return[];throw error}
+ }catch(error){if(savedRepoNotFound(error))return[];throw error}
 }
 async function readSavedRepoFile(g,path){const json=(await requestUrl({url:savedRepoUrl(g,path),headers:savedRepoHeaders(g)})).json;if(!json||!json.content)throw new Error(`GitHub did not return content for ${path}`);return decodeGitHubText(json.content)}
 function savedRelativePath(root,remotePath){
@@ -65,11 +66,11 @@ BrytePlugin.prototype.pullStudentWork=async function(options={}){
  try{
   const root=savedRepoRoot(g);
   let remotePaths=[];
+  // Root-level notes are first-class in personal mentorship repositories.
+  for(const dir of SAVED_NOTE_DIRS)remotePaths.push(...await listSavedRepoFiles(g,dir));
+  // Continue supporting the older Bryte Mentorship-prefixed saved-work layout.
   for(const dir of SAVED_WORK_DIRS)remotePaths.push(...await listSavedRepoFiles(g,normalizePath(`${root}/${dir}`)));
-  for(const dir of SAVED_NOTE_DIRS){
-   remotePaths.push(...await listSavedRepoFiles(g,dir));
-   remotePaths.push(...await listSavedRepoFiles(g,normalizePath(`${root}/${dir}`)));
-  }
+  for(const dir of SAVED_NOTE_DIRS)remotePaths.push(...await listSavedRepoFiles(g,normalizePath(`${root}/${dir}`)));
   remotePaths=[...new Set(remotePaths)].sort();
   let restored=0,unchanged=0,conflicts=0;
   for(const remotePath of remotePaths){
@@ -112,7 +113,7 @@ BryteSettings.prototype.display=function(){
  const e=this.containerEl;
  e.createEl('h3',{text:'Saved-repo restore'});
  new Setting(e).setName('Pull saved work with assignments').setDesc('Before released assignments are installed, restore Studies, Meetings, Study Plans, and Markdown notes from the configured student GitHub repository.').addToggle(t=>t.setValue(this.p.data.settings.pullStudentWorkWithAssignments!==false).onChange(async value=>{this.p.data.settings.pullStudentWorkWithAssignments=value;await this.p.save()}));
- new Setting(e).setName('Pull saved work now').setDesc('Existing local files are never silently overwritten. A differing GitHub copy is placed under “Bryte Mentorship/Recovered from GitHub” for review.').addButton(b=>b.setButtonText('Pull now').setCta().onClick(async()=>{await this.p.pullStudentWork({silent:false})}));
+ new Setting(e).setName('Pull saved work now').setDesc('Restores repo-root notes/ Markdown files into Bryte Mentorship/Notes. Existing local files are never silently overwritten; differing GitHub copies are preserved under Recovered from GitHub.').addButton(b=>b.setButtonText('Pull now').setCta().onClick(async()=>{await this.p.pullStudentWork({silent:false})}));
 };
 const savedRepoBaseDashboardRender=Dashboard.prototype.render;
 Dashboard.prototype.render=async function(){
