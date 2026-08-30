@@ -23,6 +23,22 @@ Starting with Bryte Mentorship **0.1.4**, the plugin can check the public Stable
 
 Users already running a version older than 0.1.4 need to install 0.1.4 (or a later version) once through the normal ZIP install path. After that bootstrap update, future Stable releases can be discovered and installed from inside the plugin.
 
+## Student saved repository
+
+Bryte Mentorship **0.1.5** can restore student-owned work from the private GitHub repository already configured in plugin settings.
+
+Configure **Repository owner**, **Repository name**, **Branch**, **Path prefix**, and a fine-grained token limited to that student repository with **Contents read/write** access. The plugin continues to use the public repository for released curriculum and the student's configured repository for their own saved work.
+
+By default, **Pull assignments** now restores saved student work first, then installs or updates the released curriculum. You can disable this behavior with **Pull saved work with assignments**, or run **Bryte Mentorship: Pull student work from private GitHub repository** / **Pull saved work** at any time.
+
+Saved-repository restore is intentionally limited to:
+
+- `Bryte Mentorship/Studies/`
+- `Bryte Mentorship/Meetings/`
+- `Bryte Mentorship/Study Plans/`
+
+Missing files are restored to the normal vault paths. Matching files are left unchanged. If a local file differs from the GitHub copy, the local file is preserved and the remote copy is written under `Bryte Mentorship/Recovered from GitHub/` for review instead of silently overwriting student work. Restored study frontmatter also restores the assignment status used by the dashboard.
+
 ## Released curriculum
 
 The public assignment feed currently contains:
@@ -36,7 +52,7 @@ The curriculum feed is available under [`assignments/`](assignments/).
 
 This repository is for public curriculum and release files only. Do not place personal or participant information in this repository.
 
-Plugin software update checks use only the public release feed. Student notes, meeting information, flashcard review history, and private GitHub credentials are not part of the public plugin update request.
+Plugin software update checks use only the public release feed. Student notes, meeting information, flashcard review history, and private GitHub credentials are not part of the public plugin update request. Access to a student's private repository is made directly from that student's Obsidian plugin with the repository-scoped token they configure.
 
 ## Verify the download
 
